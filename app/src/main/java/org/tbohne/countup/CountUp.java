@@ -16,9 +16,23 @@ import java.util.List;
 
 public class CountUp extends AppCompatActivity {
 
-    TextView text;
-    NfcAdapter nfcAdapter;
-    PendingIntent pendingIntent;
+    private TextView text;
+    private NfcAdapter nfcAdapter;
+    private PendingIntent pendingIntent;
+
+    private String actOne;
+    private String actTwo;
+
+    private TextView actOneTime;
+    private TextView actTwoTime;
+
+    private long actOneDuration;
+    private long actTwoDuration;
+
+    private long actOneStart;
+    private long actTwoStart;
+
+    private String currentActivity;
 
     /**
      * Called when the activity is starting.
@@ -33,6 +47,16 @@ public class CountUp extends AppCompatActivity {
 
         this.text = findViewById(R.id.text);
         this.nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+        this.actOneTime = findViewById(R.id.act1_time);
+        this.actTwoTime = findViewById(R.id.act2_time);
+
+        // TODO: shouldn't be hard coded!
+        this.actOne = "Act0";
+        this.actTwo = "Act1";
+        this.actOneDuration = 0;
+        this.actTwoDuration = 0;
+        this.currentActivity = "";
 
         if (this.nfcAdapter == null) {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
@@ -104,6 +128,14 @@ public class CountUp extends AppCompatActivity {
         }
     }
 
+    private void startCountUp() {
+        if (this.currentActivity.equals(this.actOne)) {
+            this.actOneStart = System.nanoTime();
+        } else if (this.currentActivity.equals(this.actTwo)) {
+            this.actTwoStart = System.nanoTime();
+        }
+    }
+
     /**
      *
      * @param messages
@@ -120,7 +152,27 @@ public class CountUp extends AppCompatActivity {
                 String str = record.str();
                 builder.append(str).append("\n");
             }
-            text.setText(builder.toString());
+
+            if (!this.currentActivity.equals(builder.toString().trim())) {
+
+                if (this.currentActivity.equals(this.actOne)) {
+                    long duration = System.nanoTime() - this.actOneStart;
+                    this.actOneDuration += duration;
+                    double seconds = Math.round((double)this.actOneDuration / 1000000000.0);
+                    this.actOneTime.setText(seconds + "");
+                } else if (this.currentActivity.equals(this.actTwo)) {
+                    long duration = System.nanoTime() - this.actTwoStart;
+                    this.actTwoDuration += duration;
+                    double seconds = Math.round((double)this.actTwoDuration / 1000000000.0);
+                    this.actTwoTime.setText(seconds + "");
+                }
+
+                this.currentActivity = builder.toString().trim();
+                this.text.setText(builder.toString().trim());
+                this.startCountUp();
+            } else {
+                this.text.setText("still the same");
+            }
         }
     }
 
