@@ -20,7 +20,7 @@
         android:weightSum="1">
 
         <TextView
-            android:id="@+id/act1"
+            android:id="@+id/act0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ACT 0"
@@ -31,7 +31,7 @@
             android:layout_marginTop="40dp" />
 
         <TextView
-            android:id="@+id/act1_time"
+            android:id="@+id/act0_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2 h 30 min"
@@ -41,7 +41,7 @@
             android:layout_gravity="center_horizontal" />
 
         <TextView
-        android:id="@+id/act2"
+        android:id="@+id/act1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ACT 1"
@@ -52,7 +52,7 @@
         android:layout_marginTop="40dp" />
 
         <TextView
-        android:id="@+id/act2_time"
+        android:id="@+id/act1_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="5 h 15 min"
@@ -73,6 +73,15 @@
             android:layout_marginRight="20dp"
             android:layout_marginTop="50dp"
             android:gravity="center_horizontal" />
+
+        <Button
+            android:text="Stop Session"
+            android:id="@+id/stop"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

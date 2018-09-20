@@ -9,6 +9,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,25 +20,25 @@ import java.util.List;
 public class CountUp extends AppCompatActivity {
 
     private TextView text;
+    private Button stopSession;
+
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
 
+    private String actZero;
     private String actOne;
-    private String actTwo;
-
-    private TextView actOneTime;
-    private TextView actTwoTime;
-
-    private long actOneDuration;
-    private long actTwoDuration;
-
-    private long actOneStart;
-    private long actTwoStart;
-
     private String currentActivity;
 
+    private TextView actZeroTime;
+    private TextView actOneTime;
+
+    private long actZeroDuration;
+    private long actOneDuration;
+    private long actZeroStart;
+    private long actOneStart;
+
     /**
-     * Called when the activity is starting.
+     * Called when the activity is started.
      *
      * @param savedInstanceState
      */
@@ -46,16 +49,28 @@ public class CountUp extends AppCompatActivity {
         setContentView(R.layout.count_up);
 
         this.text = findViewById(R.id.text);
+        this.stopSession = findViewById(R.id.stop);
+
+        stopSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                terminateCurrentActivity();
+                ViewGroup parentView = (ViewGroup) v.getParent();
+                parentView.removeView(v);
+                text.setText("SESSION FINISHED");
+            }
+        });
+
         this.nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
+        this.actZeroTime = findViewById(R.id.act0_time);
         this.actOneTime = findViewById(R.id.act1_time);
-        this.actTwoTime = findViewById(R.id.act2_time);
 
         // TODO: shouldn't be hard coded!
-        this.actOne = "Act0";
-        this.actTwo = "Act1";
+        this.actZero = "Act0";
+        this.actOne = "Act1";
+        this.actZeroDuration = 0;
         this.actOneDuration = 0;
-        this.actTwoDuration = 0;
         this.currentActivity = "";
 
         if (this.nfcAdapter == null) {
@@ -65,6 +80,28 @@ public class CountUp extends AppCompatActivity {
             this.pendingIntent = PendingIntent.getActivity(this, 0,
                     new Intent(this, this.getClass())
                             .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+        }
+    }
+
+    /**
+     *
+     */
+    private void terminateCurrentActivity() {
+        switch (this.currentActivity) {
+            case "Act0":
+                this.actZeroDuration += System.nanoTime() - this.actZeroStart;
+                this.actZeroTime.setText(
+                        Math.round((double)this.actZeroDuration / 1000000000.0) + " s"
+                );
+                break;
+            case "Act1":
+                this.actOneDuration += System.nanoTime() - this.actOneStart;
+                this.actOneTime.setText(
+                        Math.round((double)this.actOneDuration / 1000000000.0) + " s"
+                );
+                break;
+            default:
+                // TODO
         }
     }
 
@@ -128,11 +165,14 @@ public class CountUp extends AppCompatActivity {
         }
     }
 
+    /**
+     *
+     */
     private void startCountUp() {
-        if (this.currentActivity.equals(this.actOne)) {
+        if (this.currentActivity.equals(this.actZero)) {
+            this.actZeroStart = System.nanoTime();
+        } else if (this.currentActivity.equals(this.actOne)) {
             this.actOneStart = System.nanoTime();
-        } else if (this.currentActivity.equals(this.actTwo)) {
-            this.actTwoStart = System.nanoTime();
         }
     }
 
@@ -154,24 +194,12 @@ public class CountUp extends AppCompatActivity {
             }
 
             if (!this.currentActivity.equals(builder.toString().trim())) {
-
-                if (this.currentActivity.equals(this.actOne)) {
-                    long duration = System.nanoTime() - this.actOneStart;
-                    this.actOneDuration += duration;
-                    double seconds = Math.round((double)this.actOneDuration / 1000000000.0);
-                    this.actOneTime.setText(seconds + "");
-                } else if (this.currentActivity.equals(this.actTwo)) {
-                    long duration = System.nanoTime() - this.actTwoStart;
-                    this.actTwoDuration += duration;
-                    double seconds = Math.round((double)this.actTwoDuration / 1000000000.0);
-                    this.actTwoTime.setText(seconds + "");
-                }
-
+                this.terminateCurrentActivity();
                 this.currentActivity = builder.toString().trim();
                 this.text.setText(builder.toString().trim());
                 this.startCountUp();
             } else {
-                this.text.setText("still the same");
+                this.text.setText("STILL THE SAME TAG ACTIVE");
             }
         }
     }

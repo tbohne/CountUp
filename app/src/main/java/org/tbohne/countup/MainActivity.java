@@ -16,7 +16,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         startSession = findViewById(R.id.welcome);
-
         startSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
