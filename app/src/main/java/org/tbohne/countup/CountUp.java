@@ -45,7 +45,6 @@ public class CountUp extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.count_up);
 
         this.text = findViewById(R.id.text);
@@ -77,36 +76,17 @@ public class CountUp extends AppCompatActivity {
             Toast.makeText(this, "No NFC", Toast.LENGTH_SHORT).show();
             finish();
         } else {
-            this.pendingIntent = PendingIntent.getActivity(this, 0,
-                    new Intent(this, this.getClass())
-                            .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            this.pendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    new Intent(this, this.getClass()).addFlags(
+                            Intent.FLAG_ACTIVITY_SINGLE_TOP), 0
+            );
         }
     }
 
     /**
-     *
-     */
-    private void terminateCurrentActivity() {
-        switch (this.currentActivity) {
-            case "Act0":
-                this.actZeroDuration += System.nanoTime() - this.actZeroStart;
-                this.actZeroTime.setText(
-                        Math.round((double)this.actZeroDuration / 1000000000.0) + " s"
-                );
-                break;
-            case "Act1":
-                this.actOneDuration += System.nanoTime() - this.actOneStart;
-                this.actOneTime.setText(
-                        Math.round((double)this.actOneDuration / 1000000000.0) + " s"
-                );
-                break;
-            default:
-                // TODO
-        }
-    }
-
-    /**
-     *
+     * Called when the activity restarts.
      */
     @Override
     protected void onResume() {
@@ -121,8 +101,9 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
-     *
-     * @param intent
+     * Instead of a new instance of the activity being started, this method will be called on
+     * the existing instance with the Intent that was used to re-launch it.
+     * @param intent - the intent that was used for the re-launch
      */
     @Override
     protected void onNewIntent(Intent intent) {
@@ -131,8 +112,11 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
+     * Resolves the given intent.
+     * If the nfc connection to the tag is established successfully,
+     * the transmitted messages get displayed.
      *
-     * @param intent
+     * @param intent - the operation to be performed (nfc action)
      */
     private void resolveIntent(Intent intent) {
 
@@ -166,7 +150,29 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
-     *
+     * Terminates the activity that is currently active and computes its final duration.
+     */
+    private void terminateCurrentActivity() {
+        switch (this.currentActivity) {
+            case "Act0":
+                this.actZeroDuration += System.nanoTime() - this.actZeroStart;
+                this.actZeroTime.setText(
+                        Math.round((double)this.actZeroDuration / 1000000000.0) + " s"
+                );
+                break;
+            case "Act1":
+                this.actOneDuration += System.nanoTime() - this.actOneStart;
+                this.actOneTime.setText(
+                        Math.round((double)this.actOneDuration / 1000000000.0) + " s"
+                );
+                break;
+            default:
+                // TODO
+        }
+    }
+
+    /**
+     * Starts the count-up process for the current activity by setting its start time.
      */
     private void startCountUp() {
         if (this.currentActivity.equals(this.actZero)) {
@@ -177,8 +183,10 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
+     * Displays the current nfc message in case it is not the same as before.
+     * Handles the start and termination of the different activities.
      *
-     * @param messages
+     * @param messages - the nfc messages to be parsed
      */
     private void displayMessages(NdefMessage[] messages) {
         if (messages != null && messages.length != 0) {
@@ -205,7 +213,7 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
-     *
+     * Shows the wireless settings in case that nfc is not enabled on the target device.
      */
     private void showWirelessSettings() {
         Toast.makeText(this, "You need to enable NFC", Toast.LENGTH_SHORT).show();

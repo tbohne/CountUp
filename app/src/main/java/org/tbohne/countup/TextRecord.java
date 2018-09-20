@@ -12,8 +12,9 @@ public class TextRecord {
     private final String text;
 
     /**
+     * TextRecord constructor
      *
-     * @param text
+     * @param text - the text record's content
      */
     @SuppressLint("RestrictedApi")
     public TextRecord(String text) {
@@ -21,17 +22,19 @@ public class TextRecord {
     }
 
     /**
+     * Returns the content of the text record.
      *
-     * @return
+     * @return the text record's content
      */
     public String str() {
         return this.text;
     }
 
     /**
+     * Parses the NdefRecord and creates the text record.
      *
-     * @param record
-     * @return
+     * @param record - the record to be parsed
+     * @return the created text record
      */
     @SuppressLint("RestrictedApi")
     public static TextRecord parse(NdefRecord record) {
@@ -54,9 +57,10 @@ public class TextRecord {
     }
 
     /**
+     * Returns whether the NdefRecord is parsable as text.
      *
-     * @param record
-     * @return
+     * @param record - the NdefRecord to be parsed
+     * @return true --> parsable as text / false --> not parsable as text
      */
     public static boolean isText(NdefRecord record) {
         try {
