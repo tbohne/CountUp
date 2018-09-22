@@ -20,30 +20,21 @@
         tools:layout_editor_absoluteX="8dp"
         android:weightSum="1">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="COUNT UP"
-            android:textSize="32pt"
-            android:textStyle="bold"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp" />
 
-        <!--<ImageView-->
-            <!--android:background="@drawable/drawing1"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:layout_marginTop="20dp"-->
-            <!--android:layout_width="250dp"-->
-            <!--android:layout_height="250dp"-->
-            <!--android:layout_weight="0.04" />-->
+        <ImageView
+            android:background="@drawable/logo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="50dp"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_weight="0.04" />
 
         <Button
             android:text="Start Session"
             android:id="@+id/welcome"
             android:textStyle="bold"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
