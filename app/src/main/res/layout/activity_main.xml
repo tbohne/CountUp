@@ -20,7 +20,6 @@
         tools:layout_editor_absoluteX="8dp"
         android:weightSum="1">
 
-
         <ImageView
             android:background="@drawable/logo"
             android:layout_gravity="center_horizontal"
@@ -37,7 +36,6 @@
             android:layout_marginTop="50dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
     </LinearLayout>
 
 </RelativeLayout>
