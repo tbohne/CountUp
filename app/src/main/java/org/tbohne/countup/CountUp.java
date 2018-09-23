@@ -27,15 +27,33 @@ public class CountUp extends AppCompatActivity {
 
     private String actZero;
     private String actOne;
+    private String actTwo;
+    private String actThree;
+    private String actFour;
+    private String actFive;
+
     private String currentActivity;
 
     private TextView actZeroTime;
     private TextView actOneTime;
+    private TextView actTwoTime;
+    private TextView actThreeTime;
+    private TextView actFourTime;
+    private TextView actFiveTime;
 
     private long actZeroDuration;
     private long actOneDuration;
+    private long actTwoDuration;
+    private long actThreeDuration;
+    private long actFourDuration;
+    private long actFiveDuration;
+
     private long actZeroStart;
     private long actOneStart;
+    private long actTwoStart;
+    private long actThreeStart;
+    private long actFourStart;
+    private long actFiveStart;
 
     /**
      * Called when the activity is started.
@@ -56,7 +74,7 @@ public class CountUp extends AppCompatActivity {
                 terminateCurrentActivity();
                 ViewGroup parentView = (ViewGroup) v.getParent();
                 parentView.removeView(v);
-                text.setText("SESSION FINISHED");
+                // text.setText("SESSION FINISHED");
             }
         });
 
@@ -64,12 +82,26 @@ public class CountUp extends AppCompatActivity {
 
         this.actZeroTime = findViewById(R.id.act0_time);
         this.actOneTime = findViewById(R.id.act1_time);
+        this.actTwoTime = findViewById(R.id.act2_time);
+        this.actThreeTime = findViewById(R.id.act3_time);
+        this.actFourTime = findViewById(R.id.act4_time);
+        this.actFiveTime = findViewById(R.id.act5_time);
 
         // TODO: shouldn't be hard coded!
         this.actZero = "Act0";
         this.actOne = "Act1";
+        this.actTwo = "Act2";
+        this.actThree = "Act3";
+        this.actFour = "Act4";
+        this.actFive = "Act5";
+
         this.actZeroDuration = 0;
         this.actOneDuration = 0;
+        this.actTwoDuration = 0;
+        this.actThreeDuration = 0;
+        this.actFourDuration = 0;
+        this.actFiveDuration = 0;
+
         this.currentActivity = "";
 
         if (this.nfcAdapter == null) {
@@ -166,6 +198,30 @@ public class CountUp extends AppCompatActivity {
                         Math.round((double)this.actOneDuration / 1000000000.0) + " s"
                 );
                 break;
+            case "Act2":
+                this.actTwoDuration += System.nanoTime() - this.actTwoStart;
+                this.actTwoTime.setText(
+                        Math.round((double)this.actTwoDuration / 1000000000.0) + " s"
+                );
+                break;
+            case "Act3":
+                this.actThreeDuration += System.nanoTime() - this.actThreeStart;
+                this.actThreeTime.setText(
+                        Math.round((double)this.actThreeDuration / 1000000000.0) + " s"
+                );
+                break;
+            case "Act4":
+                this.actFourDuration += System.nanoTime() - this.actFourStart;
+                this.actFourTime.setText(
+                        Math.round((double)this.actFourDuration / 1000000000.0) + " s"
+                );
+                break;
+            case "Act5":
+                this.actFiveDuration += System.nanoTime() - this.actFiveStart;
+                this.actFiveTime.setText(
+                        Math.round((double)this.actFiveDuration / 1000000000.0) + " s"
+                );
+                break;
             default:
                 // TODO
         }
@@ -175,10 +231,19 @@ public class CountUp extends AppCompatActivity {
      * Starts the count-up process for the current activity by setting its start time.
      */
     private void startCountUp() {
+
         if (this.currentActivity.equals(this.actZero)) {
             this.actZeroStart = System.nanoTime();
         } else if (this.currentActivity.equals(this.actOne)) {
             this.actOneStart = System.nanoTime();
+        } else if (this.currentActivity.equals(this.actTwo)) {
+            this.actTwoStart = System.nanoTime();
+        } else if (this.currentActivity.equals(this.actThree)) {
+            this.actThreeStart = System.nanoTime();
+        } else if (this.currentActivity.equals(this.actFour)) {
+            this.actFourStart = System.nanoTime();
+        } else if (this.currentActivity.equals(this.actFive)) {
+            this.actFiveStart = System.nanoTime();
         }
     }
 
@@ -204,11 +269,12 @@ public class CountUp extends AppCompatActivity {
             if (!this.currentActivity.equals(builder.toString().trim())) {
                 this.terminateCurrentActivity();
                 this.currentActivity = builder.toString().trim();
-                this.text.setText(builder.toString().trim());
+                // this.text.setText(builder.toString().trim());
                 this.startCountUp();
-            } else {
-                this.text.setText("STILL THE SAME TAG ACTIVE");
             }
+//            } else {
+//                this.text.setText("STILL THE SAME TAG ACTIVE");
+//            }
         }
     }
 
