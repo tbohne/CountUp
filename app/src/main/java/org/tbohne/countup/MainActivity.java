@@ -3,6 +3,7 @@ package org.tbohne.countup;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -24,8 +25,10 @@ public class MainActivity extends AppCompatActivity {
 
         this.activities = new ArrayList<>();
 
-        for (int i = 0; i < 6; i++) {
-            this.promptActivity(i);
+        if (!this.restoreActivities()) {
+            for (int i = 0; i < 6; i++) {
+                this.promptActivity(i);
+            }
         }
 
         startSession = findViewById(R.id.welcome);
@@ -37,6 +40,38 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        SharedPreferences pref = this.getSharedPreferences("activities", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        for (int i = 0; i < this.activities.size(); i++) {
+            editor.putString("activity_" + i, this.activities.get(i));
+        }
+        editor.apply();
+    }
+
+    /**
+     *
+     * @return
+     */
+    private boolean restoreActivities() {
+
+        SharedPreferences prfs = getSharedPreferences("activities", MainActivity.MODE_PRIVATE);
+
+        for (int i = 0; i < 6; i++) {
+            if (prfs.contains("activity_" + i)) {
+                String activity = prfs.getString("activity_" + i, "");
+                this.activities.add(activity);
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
