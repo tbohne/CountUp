@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CountUp extends AppCompatActivity {
@@ -25,12 +26,7 @@ public class CountUp extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
 
-    private String actZero;
-    private String actOne;
-    private String actTwo;
-    private String actThree;
-    private String actFour;
-    private String actFive;
+    private ArrayList<String> activities;
 
     private String currentActivity;
 
@@ -40,6 +36,13 @@ public class CountUp extends AppCompatActivity {
     private TextView actThreeTime;
     private TextView actFourTime;
     private TextView actFiveTime;
+
+    private TextView actZeroSlot;
+    private TextView actOneSlot;
+    private TextView actTwoSlot;
+    private TextView actThreeSlot;
+    private TextView actFourSlot;
+    private TextView actFiveSlot;
 
     private long actZeroDuration;
     private long actOneDuration;
@@ -65,6 +68,9 @@ public class CountUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.count_up);
 
+        Bundle bundle = getIntent().getExtras();
+        this.activities = bundle.getStringArrayList("activities");
+
         this.text = findViewById(R.id.text);
         this.stopSession = findViewById(R.id.stop);
 
@@ -74,34 +80,11 @@ public class CountUp extends AppCompatActivity {
                 terminateCurrentActivity();
                 ViewGroup parentView = (ViewGroup) v.getParent();
                 parentView.removeView(v);
-                // text.setText("SESSION FINISHED");
             }
         });
 
         this.nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-
-        this.actZeroTime = findViewById(R.id.act0_time);
-        this.actOneTime = findViewById(R.id.act1_time);
-        this.actTwoTime = findViewById(R.id.act2_time);
-        this.actThreeTime = findViewById(R.id.act3_time);
-        this.actFourTime = findViewById(R.id.act4_time);
-        this.actFiveTime = findViewById(R.id.act5_time);
-
-        // TODO: shouldn't be hard coded!
-        this.actZero = "Act0";
-        this.actOne = "Act1";
-        this.actTwo = "Act2";
-        this.actThree = "Act3";
-        this.actFour = "Act4";
-        this.actFive = "Act5";
-
-        this.actZeroDuration = 0;
-        this.actOneDuration = 0;
-        this.actTwoDuration = 0;
-        this.actThreeDuration = 0;
-        this.actFourDuration = 0;
-        this.actFiveDuration = 0;
-
+        this.initializeActivities();
         this.currentActivity = "";
 
         if (this.nfcAdapter == null) {
@@ -182,6 +165,39 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
+     *
+     */
+    private void initializeActivities() {
+        this.actZeroTime = findViewById(R.id.act0_time);
+        this.actOneTime = findViewById(R.id.act1_time);
+        this.actTwoTime = findViewById(R.id.act2_time);
+        this.actThreeTime = findViewById(R.id.act3_time);
+        this.actFourTime = findViewById(R.id.act4_time);
+        this.actFiveTime = findViewById(R.id.act5_time);
+
+        this.actZeroSlot = findViewById(R.id.act0);
+        this.actOneSlot = findViewById(R.id.act1);
+        this.actTwoSlot = findViewById(R.id.act2);
+        this.actThreeSlot = findViewById(R.id.act3);
+        this.actFourSlot = findViewById(R.id.act4);
+        this.actFiveSlot = findViewById(R.id.act5);
+
+        this.actZeroSlot.setText(this.activities.get(0));
+        this.actOneSlot.setText(this.activities.get(1));
+        this.actTwoSlot.setText(this.activities.get(2));
+        this.actThreeSlot.setText(this.activities.get(3));
+        this.actFourSlot.setText(this.activities.get(4));
+        this.actFiveSlot.setText(this.activities.get(5));
+
+        this.actZeroDuration = 0;
+        this.actOneDuration = 0;
+        this.actTwoDuration = 0;
+        this.actThreeDuration = 0;
+        this.actFourDuration = 0;
+        this.actFiveDuration = 0;
+    }
+
+    /**
      * Terminates the activity that is currently active and computes its final duration.
      */
     private void terminateCurrentActivity() {
@@ -232,17 +248,17 @@ public class CountUp extends AppCompatActivity {
      */
     private void startCountUp() {
 
-        if (this.currentActivity.equals(this.actZero)) {
+        if (this.currentActivity.equals(this.activities.get(0))) {
             this.actZeroStart = System.nanoTime();
-        } else if (this.currentActivity.equals(this.actOne)) {
+        } else if (this.currentActivity.equals(this.activities.get(1))) {
             this.actOneStart = System.nanoTime();
-        } else if (this.currentActivity.equals(this.actTwo)) {
+        } else if (this.currentActivity.equals(this.activities.get(2))) {
             this.actTwoStart = System.nanoTime();
-        } else if (this.currentActivity.equals(this.actThree)) {
+        } else if (this.currentActivity.equals(this.activities.get(3))) {
             this.actThreeStart = System.nanoTime();
-        } else if (this.currentActivity.equals(this.actFour)) {
+        } else if (this.currentActivity.equals(this.activities.get(4))) {
             this.actFourStart = System.nanoTime();
-        } else if (this.currentActivity.equals(this.actFive)) {
+        } else if (this.currentActivity.equals(this.activities.get(5))) {
             this.actFiveStart = System.nanoTime();
         }
     }
@@ -269,12 +285,8 @@ public class CountUp extends AppCompatActivity {
             if (!this.currentActivity.equals(builder.toString().trim())) {
                 this.terminateCurrentActivity();
                 this.currentActivity = builder.toString().trim();
-                // this.text.setText(builder.toString().trim());
                 this.startCountUp();
             }
-//            } else {
-//                this.text.setText("STILL THE SAME TAG ACTIVE");
-//            }
         }
     }
 
