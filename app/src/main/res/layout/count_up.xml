@@ -36,11 +36,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp" />
 
-                <TextView
+                <Chronometer
                     android:id="@+id/act0_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 h 30 min"
                     android:textSize="10pt"
                     android:textStyle="bold"
                     android:textColor="#b9c7dd"
@@ -57,11 +56,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp" />
 
-                <TextView
+                <Chronometer
                     android:id="@+id/act2_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 h 30 min"
                     android:textSize="10pt"
                     android:textStyle="bold"
                     android:textColor="#b9c7dd"
@@ -78,11 +76,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp" />
 
-                <TextView
+                <Chronometer
                     android:id="@+id/act4_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2 h 30 min"
                     android:textSize="10pt"
                     android:textStyle="bold"
                     android:textColor="#b9c7dd"
@@ -114,11 +111,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp" />
 
-                <TextView
+                <Chronometer
                     android:id="@+id/act1_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5 h 15 min"
                     android:textSize="10pt"
                     android:textStyle="bold"
                     android:textColor="#b9c7dd"
@@ -135,11 +131,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp" />
 
-                <TextView
+                <Chronometer
                     android:id="@+id/act3_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5 h 15 min"
                     android:textSize="10pt"
                     android:textStyle="bold"
                     android:textColor="#b9c7dd"
@@ -156,11 +151,10 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="40dp" />
 
-                <TextView
+                <Chronometer
                     android:id="@+id/act5_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="5 h 15 min"
                     android:textSize="10pt"
                     android:textStyle="bold"
                     android:textColor="#b9c7dd"
