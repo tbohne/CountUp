@@ -7,11 +7,13 @@ import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,22 +22,23 @@ import java.util.List;
 
 public class CountUp extends AppCompatActivity {
 
-    private TextView text;
     private Button stopSession;
 
     private NfcAdapter nfcAdapter;
     private PendingIntent pendingIntent;
 
+    private ArrayList<Chronometer> chronometers;
+
+    private long timeWhenStoppedChronometer0 = 0;
+    private long timeWhenStoppedChronometer1 = 0;
+    private long timeWhenStoppedChronometer2 = 0;
+    private long timeWhenStoppedChronometer3 = 0;
+    private long timeWhenStoppedChronometer4 = 0;
+    private long timeWhenStoppedChronometer5 = 0;
+
     private ArrayList<String> activities;
 
     private String currentActivity;
-
-    private TextView actZeroTime;
-    private TextView actOneTime;
-    private TextView actTwoTime;
-    private TextView actThreeTime;
-    private TextView actFourTime;
-    private TextView actFiveTime;
 
     private TextView actZeroSlot;
     private TextView actOneSlot;
@@ -43,20 +46,6 @@ public class CountUp extends AppCompatActivity {
     private TextView actThreeSlot;
     private TextView actFourSlot;
     private TextView actFiveSlot;
-
-    private long actZeroDuration;
-    private long actOneDuration;
-    private long actTwoDuration;
-    private long actThreeDuration;
-    private long actFourDuration;
-    private long actFiveDuration;
-
-    private long actZeroStart;
-    private long actOneStart;
-    private long actTwoStart;
-    private long actThreeStart;
-    private long actFourStart;
-    private long actFiveStart;
 
     /**
      * Called when the activity is started.
@@ -68,10 +57,23 @@ public class CountUp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.count_up);
 
+        this.chronometers = new ArrayList<>();
+
+        this.chronometers.add((Chronometer) findViewById(R.id.act0_time));
+        this.chronometers.add((Chronometer) findViewById(R.id.act1_time));
+        this.chronometers.add((Chronometer) findViewById(R.id.act2_time));
+        this.chronometers.add((Chronometer) findViewById(R.id.act3_time));
+        this.chronometers.add((Chronometer) findViewById(R.id.act4_time));
+        this.chronometers.add((Chronometer) findViewById(R.id.act5_time));
+
+        for (Chronometer chronometer : this.chronometers) {
+            chronometer.setFormat("%s");
+            chronometer.setBase(SystemClock.elapsedRealtime());
+        }
+
         Bundle bundle = getIntent().getExtras();
         this.activities = bundle.getStringArrayList("activities");
 
-        this.text = findViewById(R.id.text);
         this.stopSession = findViewById(R.id.stop);
 
         stopSession.setOnClickListener(new View.OnClickListener() {
@@ -168,13 +170,6 @@ public class CountUp extends AppCompatActivity {
      *
      */
     private void initializeActivities() {
-        this.actZeroTime = findViewById(R.id.act0_time);
-        this.actOneTime = findViewById(R.id.act1_time);
-        this.actTwoTime = findViewById(R.id.act2_time);
-        this.actThreeTime = findViewById(R.id.act3_time);
-        this.actFourTime = findViewById(R.id.act4_time);
-        this.actFiveTime = findViewById(R.id.act5_time);
-
         this.actZeroSlot = findViewById(R.id.act0);
         this.actOneSlot = findViewById(R.id.act1);
         this.actTwoSlot = findViewById(R.id.act2);
@@ -188,58 +183,49 @@ public class CountUp extends AppCompatActivity {
         this.actThreeSlot.setText(this.activities.get(3));
         this.actFourSlot.setText(this.activities.get(4));
         this.actFiveSlot.setText(this.activities.get(5));
+    }
 
-        this.actZeroDuration = 0;
-        this.actOneDuration = 0;
-        this.actTwoDuration = 0;
-        this.actThreeDuration = 0;
-        this.actFourDuration = 0;
-        this.actFiveDuration = 0;
+    /**
+     *
+     */
+    private void pauseCurrentActivity() {
+        if (this.currentActivity.equals(this.activities.get(0))) {
+            this.timeWhenStoppedChronometer0 = this.chronometers.get(0).getBase() - SystemClock.elapsedRealtime();
+            this.chronometers.get(0).stop();
+        } else if (this.currentActivity.equals(this.activities.get(1))) {
+            this.timeWhenStoppedChronometer1 = this.chronometers.get(1).getBase() - SystemClock.elapsedRealtime();
+            this.chronometers.get(1).stop();
+        } else if (this.currentActivity.equals(this.activities.get(2))) {
+            this.timeWhenStoppedChronometer2 = this.chronometers.get(2).getBase() - SystemClock.elapsedRealtime();
+            this.chronometers.get(2).stop();
+        } else if (this.currentActivity.equals(this.activities.get(3))) {
+            this.timeWhenStoppedChronometer3 = this.chronometers.get(3).getBase() - SystemClock.elapsedRealtime();
+            this.chronometers.get(3).stop();
+        } else if (this.currentActivity.equals(this.activities.get(4))) {
+            this.timeWhenStoppedChronometer4 = this.chronometers.get(4).getBase() - SystemClock.elapsedRealtime();
+            this.chronometers.get(4).stop();
+        } else if (this.currentActivity.equals(this.activities.get(5))) {
+            this.timeWhenStoppedChronometer5 = this.chronometers.get(5).getBase() - SystemClock.elapsedRealtime();
+            this.chronometers.get(5).stop();
+        }
     }
 
     /**
      * Terminates the activity that is currently active and computes its final duration.
      */
     private void terminateCurrentActivity() {
-        switch (this.currentActivity) {
-            case "Act0":
-                this.actZeroDuration += System.nanoTime() - this.actZeroStart;
-                this.actZeroTime.setText(
-                        Math.round((double)this.actZeroDuration / 1000000000.0) + " s"
-                );
-                break;
-            case "Act1":
-                this.actOneDuration += System.nanoTime() - this.actOneStart;
-                this.actOneTime.setText(
-                        Math.round((double)this.actOneDuration / 1000000000.0) + " s"
-                );
-                break;
-            case "Act2":
-                this.actTwoDuration += System.nanoTime() - this.actTwoStart;
-                this.actTwoTime.setText(
-                        Math.round((double)this.actTwoDuration / 1000000000.0) + " s"
-                );
-                break;
-            case "Act3":
-                this.actThreeDuration += System.nanoTime() - this.actThreeStart;
-                this.actThreeTime.setText(
-                        Math.round((double)this.actThreeDuration / 1000000000.0) + " s"
-                );
-                break;
-            case "Act4":
-                this.actFourDuration += System.nanoTime() - this.actFourStart;
-                this.actFourTime.setText(
-                        Math.round((double)this.actFourDuration / 1000000000.0) + " s"
-                );
-                break;
-            case "Act5":
-                this.actFiveDuration += System.nanoTime() - this.actFiveStart;
-                this.actFiveTime.setText(
-                        Math.round((double)this.actFiveDuration / 1000000000.0) + " s"
-                );
-                break;
-            default:
-                // TODO
+        if (this.currentActivity.equals(this.activities.get(0))) {
+            this.chronometers.get(0).stop();
+        } else if (this.currentActivity.equals(this.activities.get(1))) {
+            this.chronometers.get(1).stop();
+        } else if (this.currentActivity.equals(this.activities.get(2))) {
+            this.chronometers.get(2).stop();
+        } else if (this.currentActivity.equals(this.activities.get(3))) {
+            this.chronometers.get(3).stop();
+        } else if (this.currentActivity.equals(this.activities.get(4))) {
+            this.chronometers.get(4).stop();
+        } else if (this.currentActivity.equals(this.activities.get(5))) {
+            this.chronometers.get(5).stop();
         }
     }
 
@@ -247,19 +233,24 @@ public class CountUp extends AppCompatActivity {
      * Starts the count-up process for the current activity by setting its start time.
      */
     private void startCountUp() {
-
         if (this.currentActivity.equals(this.activities.get(0))) {
-            this.actZeroStart = System.nanoTime();
+            this.chronometers.get(0).setBase(SystemClock.elapsedRealtime() + this.timeWhenStoppedChronometer0);
+            this.chronometers.get(0).start();
         } else if (this.currentActivity.equals(this.activities.get(1))) {
-            this.actOneStart = System.nanoTime();
+            this.chronometers.get(1).setBase(SystemClock.elapsedRealtime() + this.timeWhenStoppedChronometer1);
+            this.chronometers.get(1).start();
         } else if (this.currentActivity.equals(this.activities.get(2))) {
-            this.actTwoStart = System.nanoTime();
+            this.chronometers.get(2).setBase(SystemClock.elapsedRealtime() + this.timeWhenStoppedChronometer2);
+            this.chronometers.get(2).start();
         } else if (this.currentActivity.equals(this.activities.get(3))) {
-            this.actThreeStart = System.nanoTime();
+            this.chronometers.get(3).setBase(SystemClock.elapsedRealtime() + this.timeWhenStoppedChronometer3);
+            this.chronometers.get(3).start();
         } else if (this.currentActivity.equals(this.activities.get(4))) {
-            this.actFourStart = System.nanoTime();
+            this.chronometers.get(4).setBase(SystemClock.elapsedRealtime() + this.timeWhenStoppedChronometer4);
+            this.chronometers.get(4).start();
         } else if (this.currentActivity.equals(this.activities.get(5))) {
-            this.actFiveStart = System.nanoTime();
+            this.chronometers.get(5).setBase(SystemClock.elapsedRealtime() + this.timeWhenStoppedChronometer5);
+            this.chronometers.get(5).start();
         }
     }
 
@@ -282,9 +273,14 @@ public class CountUp extends AppCompatActivity {
                 builder.append(str).append("\n");
             }
 
-            if (!this.currentActivity.equals(builder.toString().trim())) {
-                this.terminateCurrentActivity();
-                this.currentActivity = builder.toString().trim();
+            int currentActivityIdx = this.activities.indexOf(this.currentActivity);
+            String currentTag = "Act" + currentActivityIdx;
+
+            if (!currentTag.equals(builder.toString().trim())) {
+                // this.terminateCurrentActivity();
+                this.pauseCurrentActivity();
+                int activityIdx = Integer.parseInt(builder.toString().trim().replace("Act", ""));
+                this.currentActivity = this.activities.get(activityIdx);
                 this.startCountUp();
             }
         }
