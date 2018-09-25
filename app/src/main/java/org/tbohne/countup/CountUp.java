@@ -2,6 +2,7 @@ package org.tbohne.countup;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -37,15 +38,9 @@ public class CountUp extends AppCompatActivity {
     private long timeWhenStoppedChronometer5 = 0;
 
     private ArrayList<String> activities;
+    private ArrayList<TextView> views;
 
     private String currentActivity;
-
-    private TextView actZeroSlot;
-    private TextView actOneSlot;
-    private TextView actTwoSlot;
-    private TextView actThreeSlot;
-    private TextView actFourSlot;
-    private TextView actFiveSlot;
 
     /**
      * Called when the activity is started.
@@ -170,19 +165,17 @@ public class CountUp extends AppCompatActivity {
      *
      */
     private void initializeActivities() {
-        this.actZeroSlot = findViewById(R.id.act0);
-        this.actOneSlot = findViewById(R.id.act1);
-        this.actTwoSlot = findViewById(R.id.act2);
-        this.actThreeSlot = findViewById(R.id.act3);
-        this.actFourSlot = findViewById(R.id.act4);
-        this.actFiveSlot = findViewById(R.id.act5);
+        this.views = new ArrayList<>();
+        views.add((TextView) findViewById(R.id.act0));
+        views.add((TextView) findViewById(R.id.act1));
+        views.add((TextView) findViewById(R.id.act2));
+        views.add((TextView) findViewById(R.id.act3));
+        views.add((TextView) findViewById(R.id.act4));
+        views.add((TextView) findViewById(R.id.act5));
 
-        this.actZeroSlot.setText(this.activities.get(0));
-        this.actOneSlot.setText(this.activities.get(1));
-        this.actTwoSlot.setText(this.activities.get(2));
-        this.actThreeSlot.setText(this.activities.get(3));
-        this.actFourSlot.setText(this.activities.get(4));
-        this.actFiveSlot.setText(this.activities.get(5));
+        for (int i = 0; i < this.views.size(); i++) {
+            this.views.get(i).setText(this.activities.get(i));
+        }
     }
 
     /**
@@ -277,10 +270,18 @@ public class CountUp extends AppCompatActivity {
             String currentTag = "Act" + currentActivityIdx;
 
             if (!currentTag.equals(builder.toString().trim())) {
-                // this.terminateCurrentActivity();
+
                 this.pauseCurrentActivity();
                 int activityIdx = Integer.parseInt(builder.toString().trim().replace("Act", ""));
+
+                if (currentActivityIdx != -1) {
+                    this.views.get(currentActivityIdx).setTextColor(Color.parseColor("#b9c7dd"));
+                }
+
                 this.currentActivity = this.activities.get(activityIdx);
+
+                this.views.get(activityIdx).setTextColor(Color.parseColor("#FF9D21"));
+
                 this.startCountUp();
             }
         }
