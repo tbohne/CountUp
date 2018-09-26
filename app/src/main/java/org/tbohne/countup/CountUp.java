@@ -74,9 +74,12 @@ public class CountUp extends AppCompatActivity {
         stopSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                terminateCurrentActivity();
-                ViewGroup parentView = (ViewGroup) v.getParent();
-                parentView.removeView(v);
+                if (((TextView)v).getText().equals("Pause Session")) {
+                    pauseCurrentActivity();
+                    ((TextView)v).setText("Resume Session");
+                } else {
+                    ((TextView)v).setText("Pause Session");
+                }
             }
         });
 
@@ -201,6 +204,8 @@ public class CountUp extends AppCompatActivity {
             this.timeWhenStoppedChronometer5 = this.chronometers.get(5).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(5).stop();
         }
+
+        this.resetCurrentActivity();
     }
 
     /**
@@ -296,7 +301,6 @@ public class CountUp extends AppCompatActivity {
             if (!currentTag.equals(builder.toString().trim())) {
                 this.pauseCurrentActivity();
                 int activityIdx = Integer.parseInt(builder.toString().trim().replace("Act", ""));
-                this.resetCurrentActivity();
                 this.currentActivity = this.activities.get(activityIdx);
                 this.highlightCurrentActivity();
                 this.startCountUp();

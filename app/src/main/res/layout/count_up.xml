@@ -172,7 +172,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginRight="22dp"
             android:layout_marginLeft="22dp"
-            android:text="Stop Session"/>
+            android:text="Pause Session"/>
 
     </RelativeLayout>
 
