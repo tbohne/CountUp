@@ -204,6 +204,28 @@ public class CountUp extends AppCompatActivity {
     }
 
     /**
+     * Resets the current activity (back to normal).
+     */
+    private void resetCurrentActivity() {
+        int currentActivityIdx = this.activities.indexOf(this.currentActivity);
+        if (currentActivityIdx != -1) {
+            TextView activityView = this.views.get(currentActivityIdx);
+            activityView.setTextColor(Color.parseColor("#b9c7dd"));
+        }
+    }
+
+    /**
+     * Highlights the current activity.
+     */
+    private void highlightCurrentActivity() {
+        int currentActivityIdx = this.activities.indexOf(this.currentActivity);
+        if (currentActivityIdx != -1) {
+            TextView activityView = this.views.get(currentActivityIdx);
+            activityView.setTextColor(Color.parseColor("#FF9D21"));
+        }
+    }
+
+    /**
      * Terminates the activity that is currently active and computes its final duration.
      */
     private void terminateCurrentActivity() {
@@ -220,6 +242,8 @@ public class CountUp extends AppCompatActivity {
         } else if (this.currentActivity.equals(this.activities.get(5))) {
             this.chronometers.get(5).stop();
         }
+
+        this.resetCurrentActivity();
     }
 
     /**
@@ -270,18 +294,11 @@ public class CountUp extends AppCompatActivity {
             String currentTag = "Act" + currentActivityIdx;
 
             if (!currentTag.equals(builder.toString().trim())) {
-
                 this.pauseCurrentActivity();
                 int activityIdx = Integer.parseInt(builder.toString().trim().replace("Act", ""));
-
-                if (currentActivityIdx != -1) {
-                    this.views.get(currentActivityIdx).setTextColor(Color.parseColor("#b9c7dd"));
-                }
-
+                this.resetCurrentActivity();
                 this.currentActivity = this.activities.get(activityIdx);
-
-                this.views.get(activityIdx).setTextColor(Color.parseColor("#FF9D21"));
-
+                this.highlightCurrentActivity();
                 this.startCountUp();
             }
         }
