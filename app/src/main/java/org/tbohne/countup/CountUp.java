@@ -69,16 +69,16 @@ public class CountUp extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         this.activities = bundle.getStringArrayList("activities");
 
-        this.stopSession = findViewById(R.id.stop);
+        this.stopSession = findViewById(R.id.pause);
 
         stopSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (((TextView)v).getText().equals("Pause Session")) {
+                if (((TextView)v).getText().equals("\u2016")) {
                     pauseCurrentActivity();
-                    ((TextView)v).setText("Resume Session");
+                    ((TextView)v).setText("\u25b6");
                 } else {
-                    ((TextView)v).setText("Pause Session");
+                    ((TextView)v).setText("\u2016");
                 }
             }
         });
