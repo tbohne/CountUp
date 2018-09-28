@@ -22,6 +22,10 @@ import java.util.List;
 
 public class CountUp extends AppCompatActivity {
 
+    private final String ACTIVE = "active";
+    private final String PAUSED = "paused";
+    private final String STOPPED = "stopped";
+
     private Button pauseSession;
     private Button stopSession;
 
@@ -40,6 +44,8 @@ public class CountUp extends AppCompatActivity {
     private ArrayList<String> times;
     private ArrayList<String> activities;
     private ArrayList<TextView> views;
+
+    private String currentMode;
 
     private String currentActivity;
 
@@ -67,6 +73,8 @@ public class CountUp extends AppCompatActivity {
             this.times.add("0");
         }
 
+        this.currentMode = this.ACTIVE;
+
         for (Chronometer chronometer : this.chronometers) {
             chronometer.setFormat("%s");
             chronometer.setBase(SystemClock.elapsedRealtime());
@@ -83,9 +91,11 @@ public class CountUp extends AppCompatActivity {
             public void onClick(View v) {
                 if (((TextView)v).getText().equals("\u2016")) {
                     pauseCurrentActivity();
+                    currentMode = PAUSED;
                     ((TextView)v).setText("\u25b6");
                 } else {
                     ((TextView)v).setText("\u2016");
+                    currentMode = ACTIVE;
                 }
             }
         });
@@ -94,6 +104,7 @@ public class CountUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 terminateCurrentActivity();
+                currentMode = STOPPED;
                 Intent intent = new Intent(CountUp.this, Results.class);
                 intent.putExtra("activities", activities);
                 System.out.println(times.size());
@@ -142,7 +153,9 @@ public class CountUp extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
-        resolveIntent(intent);
+        if (this.currentMode.equals(this.ACTIVE)) {
+            resolveIntent(intent);
+        }
     }
 
     /**
@@ -235,6 +248,8 @@ public class CountUp extends AppCompatActivity {
             this.setTimeById(5);
         }
 
+        this.resetCurrentActivity();
+        this.currentActivity = "";
         this.resetCurrentActivity();
     }
 
