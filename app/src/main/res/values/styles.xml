@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/ActionBar</item>
@@ -6,6 +6,12 @@
         <item name="colorButtonNormal">#FF9800</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">#FF9800</item>
+
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+    </style>
+
+    <style name="TextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily" tools:targetApi="jelly_bean">monospace</item>
     </style>
 
     <style name="ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -17,7 +23,5 @@
         parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
         <item name="android:textColor">#000000</item>
     </style>
-
-
 
 </resources>

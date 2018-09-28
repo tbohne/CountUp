@@ -197,9 +197,9 @@ public class CountUp extends AppCompatActivity {
     }
 
     private String limitActivityLength(String activity) {
-        if (activity.length() > 8) {
+        if (activity.length() > 7) {
             StringBuilder str = new StringBuilder(activity);
-            str.delete(7, activity.length());
+            str.delete(6, activity.length());
             return str + ".";
         }
         return activity;
