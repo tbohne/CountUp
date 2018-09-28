@@ -196,6 +196,15 @@ public class CountUp extends AppCompatActivity {
         }
     }
 
+    private String limitActivityLength(String activity) {
+        if (activity.length() > 8) {
+            StringBuilder str = new StringBuilder(activity);
+            str.delete(7, activity.length());
+            return str + ".";
+        }
+        return activity;
+    }
+
     /**
      *
      */
@@ -209,7 +218,8 @@ public class CountUp extends AppCompatActivity {
         views.add((TextView) findViewById(R.id.act5));
 
         for (int i = 0; i < this.views.size(); i++) {
-            this.views.get(i).setText(this.activities.get(i));
+            String activity = this.limitActivityLength(this.activities.get(i));
+            this.views.get(i).setText(activity);
         }
     }
 
