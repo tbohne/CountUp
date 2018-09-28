@@ -1,5 +1,6 @@
 package org.tbohne.countup;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
@@ -12,6 +13,13 @@ public class Results extends AppCompatActivity {
     private ArrayList<String> times;
     private ArrayList<TextView> activityViews;
     private ArrayList<TextView> activityTimeViews;
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     /**
      * Called when the activity is starting.
