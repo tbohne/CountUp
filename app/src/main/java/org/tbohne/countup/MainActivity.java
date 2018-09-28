@@ -87,28 +87,26 @@ public class MainActivity extends AppCompatActivity {
     private void promptActivity(final int activityIdx) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setTitle("Activity " + activityIdx);
+        builder.setTitle("Enter activity " + activityIdx);
+
+        builder.setCancelable(false);
 
         // Set up the input
         final EditText input = new EditText(MainActivity.this);
         // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT);
         builder.setView(input);
 
         // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                if (input.getText().toString().equals("")) {
+                    input.setText("ACT " + activityIdx);
+                }
                 setActivity(activityIdx, input.getText().toString());
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-
         builder.show();
     }
 }
