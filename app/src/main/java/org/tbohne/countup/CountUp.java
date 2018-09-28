@@ -12,7 +12,6 @@ import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.TextView;
@@ -23,6 +22,7 @@ import java.util.List;
 
 public class CountUp extends AppCompatActivity {
 
+    private Button pauseSession;
     private Button stopSession;
 
     private NfcAdapter nfcAdapter;
@@ -37,6 +37,7 @@ public class CountUp extends AppCompatActivity {
     private long timeWhenStoppedChronometer4 = 0;
     private long timeWhenStoppedChronometer5 = 0;
 
+    private ArrayList<String> times;
     private ArrayList<String> activities;
     private ArrayList<TextView> views;
 
@@ -61,6 +62,11 @@ public class CountUp extends AppCompatActivity {
         this.chronometers.add((Chronometer) findViewById(R.id.act4_time));
         this.chronometers.add((Chronometer) findViewById(R.id.act5_time));
 
+        this.times = new ArrayList<>();
+        for (int i = 0; i < this.chronometers.size(); i++) {
+            this.times.add("0");
+        }
+
         for (Chronometer chronometer : this.chronometers) {
             chronometer.setFormat("%s");
             chronometer.setBase(SystemClock.elapsedRealtime());
@@ -69,9 +75,10 @@ public class CountUp extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         this.activities = bundle.getStringArrayList("activities");
 
-        this.stopSession = findViewById(R.id.pause);
+        this.pauseSession = findViewById(R.id.pause);
+        this.stopSession = findViewById(R.id.stop);
 
-        stopSession.setOnClickListener(new View.OnClickListener() {
+        pauseSession.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (((TextView)v).getText().equals("\u2016")) {
@@ -80,6 +87,18 @@ public class CountUp extends AppCompatActivity {
                 } else {
                     ((TextView)v).setText("\u2016");
                 }
+            }
+        });
+
+        stopSession.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                terminateCurrentActivity();
+                Intent intent = new Intent(CountUp.this, Results.class);
+                intent.putExtra("activities", activities);
+                System.out.println(times.size());
+                intent.putExtra("times", times);
+                startActivity(intent);
             }
         });
 
@@ -181,6 +200,11 @@ public class CountUp extends AppCompatActivity {
         }
     }
 
+    private void setTimeById(int ID) {
+        long elapsedMillis = SystemClock.elapsedRealtime() - this.chronometers.get(ID).getBase();
+        this.times.set(ID, elapsedMillis / 1000 + "");
+    }
+
     /**
      *
      */
@@ -188,21 +212,27 @@ public class CountUp extends AppCompatActivity {
         if (this.currentActivity.equals(this.activities.get(0))) {
             this.timeWhenStoppedChronometer0 = this.chronometers.get(0).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(0).stop();
+            this.setTimeById(0);
         } else if (this.currentActivity.equals(this.activities.get(1))) {
             this.timeWhenStoppedChronometer1 = this.chronometers.get(1).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(1).stop();
+            this.setTimeById(1);
         } else if (this.currentActivity.equals(this.activities.get(2))) {
             this.timeWhenStoppedChronometer2 = this.chronometers.get(2).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(2).stop();
+            this.setTimeById(2);
         } else if (this.currentActivity.equals(this.activities.get(3))) {
             this.timeWhenStoppedChronometer3 = this.chronometers.get(3).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(3).stop();
+            this.setTimeById(3);
         } else if (this.currentActivity.equals(this.activities.get(4))) {
             this.timeWhenStoppedChronometer4 = this.chronometers.get(4).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(4).stop();
+            this.setTimeById(4);
         } else if (this.currentActivity.equals(this.activities.get(5))) {
             this.timeWhenStoppedChronometer5 = this.chronometers.get(5).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(5).stop();
+            this.setTimeById(5);
         }
 
         this.resetCurrentActivity();
@@ -236,16 +266,22 @@ public class CountUp extends AppCompatActivity {
     private void terminateCurrentActivity() {
         if (this.currentActivity.equals(this.activities.get(0))) {
             this.chronometers.get(0).stop();
+            this.setTimeById(0);
         } else if (this.currentActivity.equals(this.activities.get(1))) {
             this.chronometers.get(1).stop();
+            this.setTimeById(1);
         } else if (this.currentActivity.equals(this.activities.get(2))) {
             this.chronometers.get(2).stop();
+            this.setTimeById(2);
         } else if (this.currentActivity.equals(this.activities.get(3))) {
             this.chronometers.get(3).stop();
+            this.setTimeById(3);
         } else if (this.currentActivity.equals(this.activities.get(4))) {
             this.chronometers.get(4).stop();
+            this.setTimeById(4);
         } else if (this.currentActivity.equals(this.activities.get(5))) {
             this.chronometers.get(5).stop();
+            this.setTimeById(5);
         }
 
         this.resetCurrentActivity();
