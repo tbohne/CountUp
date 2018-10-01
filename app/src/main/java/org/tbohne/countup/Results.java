@@ -65,8 +65,15 @@ public class Results extends AppCompatActivity {
     private void setTimes() {
         for (int i = 0; i < this.activityTimeViews.size(); i++) {
             TextView currentView = this.activityTimeViews.get(i);
-            currentView.setText(this.times.get(i) + "");
+            int timeInSeconds = Integer.parseInt(this.times.get(i));
+            int minutes = (int)Math.floor(timeInSeconds / 60);
+            int seconds = timeInSeconds - minutes * 60;
+            int hours = (int)Math.floor(timeInSeconds / 3600);
+            String timeString = "";
+            timeString = hours < 10 ? (timeString += "0" + hours) : timeString + hours;
+            timeString = minutes < 10 ? (timeString += ":0" + minutes) : (timeString += ":" + minutes);
+            timeString = seconds < 10 ? (timeString += ":0" + seconds) : (timeString += ":" + seconds);
+            currentView.setText(timeString);
         }
     }
-
 }
