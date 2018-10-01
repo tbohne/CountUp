@@ -1,8 +1,11 @@
 package org.tbohne.countup;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -13,6 +16,9 @@ public class Results extends AppCompatActivity {
     private ArrayList<String> times;
     private ArrayList<TextView> activityViews;
     private ArrayList<TextView> activityTimeViews;
+    private ArrayList<Integer> totalTimesInSeconds;
+
+    private Button toggleResults;
 
     @Override
     public void onBackPressed() {
@@ -34,6 +40,22 @@ public class Results extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         this.activities = bundle.getStringArrayList("activities");
         this.times = bundle.getStringArrayList("times");
+        this.totalTimesInSeconds = bundle.getIntegerArrayList("totalTimesInSeconds");
+
+        this.toggleResults = findViewById(R.id.toggle_results);
+
+        this.toggleResults.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (((TextView)v).getText().equals("total durations")) {
+                    setTimes(true);
+                    ((TextView)v).setText("current durations");
+                } else {
+                    setTimes(false);
+                    ((TextView)v).setText("total durations");
+                }
+            }
+        });
 
         this.activityViews = new ArrayList<>();
         this.activityViews.add((TextView) findViewById(R.id.act0));
@@ -53,7 +75,20 @@ public class Results extends AppCompatActivity {
         this.activityTimeViews.add((TextView) findViewById(R.id.act4_time));
         this.activityTimeViews.add((TextView) findViewById(R.id.act5_time));
 
-        this.setTimes();
+        this.setTimes(false);
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+
+        SharedPreferences pref = this.getSharedPreferences("activities", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        for (int i = 0; i < this.activities.size(); i++) {
+            editor.putInt("time_" + i, this.totalTimesInSeconds.get(i));
+        }
+        editor.apply();
     }
 
     private void setActivities() {
@@ -62,10 +97,10 @@ public class Results extends AppCompatActivity {
         }
     }
 
-    private void setTimes() {
+    private void setTimes(boolean total) {
         for (int i = 0; i < this.activityTimeViews.size(); i++) {
             TextView currentView = this.activityTimeViews.get(i);
-            int timeInSeconds = Integer.parseInt(this.times.get(i));
+            int timeInSeconds = total ? this.totalTimesInSeconds.get(i) : Integer.parseInt(this.times.get(i));
             int minutes = (int)Math.floor(timeInSeconds / 60);
             int seconds = timeInSeconds - minutes * 60;
             int hours = (int)Math.floor(timeInSeconds / 3600);
