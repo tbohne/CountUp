@@ -43,6 +43,7 @@ public class CountUp extends AppCompatActivity {
 
     private ArrayList<String> times;
     private ArrayList<String> activities;
+    private ArrayList<Integer> totalTimesInSeconds;
     private ArrayList<TextView> views;
 
     private String currentMode;
@@ -82,6 +83,7 @@ public class CountUp extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         this.activities = bundle.getStringArrayList("activities");
+        this.totalTimesInSeconds = bundle.getIntegerArrayList("totalTimesInSeconds");
 
         this.pauseSession = findViewById(R.id.pause);
         this.stopSession = findViewById(R.id.stop);
@@ -109,6 +111,8 @@ public class CountUp extends AppCompatActivity {
                 intent.putExtra("activities", activities);
                 System.out.println(times.size());
                 intent.putExtra("times", times);
+                updateTotalTimes();
+                intent.putExtra("totalTimesInSeconds", totalTimesInSeconds);
                 startActivity(intent);
             }
         });
@@ -271,6 +275,14 @@ public class CountUp extends AppCompatActivity {
         if (currentActivityIdx != -1) {
             TextView activityView = this.views.get(currentActivityIdx);
             activityView.setTextColor(Color.parseColor("#b9c7dd"));
+        }
+    }
+
+    private void updateTotalTimes() {
+        for (int i = 0; i < this.totalTimesInSeconds.size(); i++) {
+            this.totalTimesInSeconds.set(
+                    i, this.totalTimesInSeconds.get(i) + Integer.parseInt(this.times.get(i))
+            );
         }
     }
 

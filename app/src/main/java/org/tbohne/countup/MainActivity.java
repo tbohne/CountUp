@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button startSession;
     private ArrayList<String> activities;
+    private ArrayList<Integer> totalTimesInSeconds;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +25,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.activities = new ArrayList<>();
+        this.totalTimesInSeconds = new ArrayList<>();
 
         if (!this.restoreActivities()) {
             for (int i = 0; i < 6; i++) {
                 this.promptActivity(i);
+                this.totalTimesInSeconds.add(0);
             }
         }
 
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, CountUp.class);
                 intent.putExtra("activities", activities);
+                intent.putExtra("totalTimesInSeconds", totalTimesInSeconds);
                 startActivity(intent);
             }
         });
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 6; i++) {
             if (prfs.contains("activity_" + i)) {
                 String activity = prfs.getString("activity_" + i, "");
+                int totalTime = prfs.getInt("time_" + i, 0);
+                this.totalTimesInSeconds.add(totalTime);
                 this.activities.add(activity);
             } else {
                 return false;
