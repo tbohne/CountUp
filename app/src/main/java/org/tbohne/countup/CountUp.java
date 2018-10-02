@@ -163,13 +163,14 @@ public class CountUp extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onPause() {
-        terminateCurrentActivity();
-        updateTotalTimes();
-        updateSharedPrefs();
-        super.onPause();
-    }
+    // TODO: To be handled another way ...
+//    @Override
+//    public void onDestroy() {
+//        terminateCurrentActivity();
+//        updateTotalTimes();
+//        updateSharedPrefs();
+//        super.onDestroy();
+//    }
 
     private void updateSharedPrefs() {
         SharedPreferences pref = this.getSharedPreferences("activities", MODE_PRIVATE);
