@@ -13,22 +13,11 @@
         android:background="#000000"
         tools:context=".MainActivity">
 
-        <TextView
-            android:id="@+id/results_header"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="SUMMARY"
-            android:textSize="18pt"
-            android:textStyle="bold"
-            android:textColor="#b9c7dd"
-            android:gravity="center"
-            android:layout_marginTop="18dp" />
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="60dp">
+            android:layout_marginTop="22dp">
 
             <TextView
                 android:id="@+id/act0"
@@ -199,7 +188,8 @@
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:layout_centerHorizontal="true"
-            android:text="total durations" />
+            android:text="total durations"
+            android:layout_marginBottom="25dp"/>
 
     </RelativeLayout>
 
