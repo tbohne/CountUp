@@ -100,8 +100,17 @@ public class Results extends AppCompatActivity {
 
     private void setActivities() {
         for (int i = 0; i < this.activityViews.size(); i++) {
-            this.activityViews.get(i).setText(this.activities.get(i));
+            this.activityViews.get(i).setText(limitActivityLength(this.activities.get(i)));
         }
+    }
+
+    private String limitActivityLength(String activity) {
+        if (activity.length() > 7) {
+            StringBuilder str = new StringBuilder(activity);
+            str.delete(6, activity.length());
+            return str + ".";
+        }
+        return activity;
     }
 
     private void setTimes(boolean total) {
