@@ -24,6 +24,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        try {
+            this.getSupportActionBar().hide();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         this.activities = new ArrayList<>();
         this.totalTimesInSeconds = new ArrayList<>();
 
