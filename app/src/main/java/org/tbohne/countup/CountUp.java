@@ -2,6 +2,7 @@ package org.tbohne.countup;
 
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -160,6 +161,24 @@ public class CountUp extends AppCompatActivity {
         if (this.currentMode.equals(this.ACTIVE)) {
             resolveIntent(intent);
         }
+    }
+
+    @Override
+    public void onPause() {
+        terminateCurrentActivity();
+        updateTotalTimes();
+        updateSharedPrefs();
+        super.onPause();
+    }
+
+    private void updateSharedPrefs() {
+        SharedPreferences pref = this.getSharedPreferences("activities", MODE_PRIVATE);
+        SharedPreferences.Editor editor = pref.edit();
+
+        for (int i = 0; i < this.activities.size(); i++) {
+            editor.putInt("time_" + i, this.totalTimesInSeconds.get(i));
+        }
+        editor.apply();
     }
 
     /**
