@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".CountUp" android:label="Current Session"/>
+        <activity android:name=".CountUp" android:label="Current Session" android:screenOrientation="portrait"/>
         <activity android:name=".Results" android:label="Summary"/>
 
     </application>
