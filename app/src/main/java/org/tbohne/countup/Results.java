@@ -117,13 +117,15 @@ public class Results extends AppCompatActivity {
         for (int i = 0; i < this.activityTimeViews.size(); i++) {
             TextView currentView = this.activityTimeViews.get(i);
             int timeInSeconds = total ? this.totalTimesInSeconds.get(i) : Integer.parseInt(this.times.get(i));
-            int minutes = (int)Math.floor(timeInSeconds / 60);
-            int seconds = timeInSeconds - minutes * 60;
-            int hours = (int)Math.floor(timeInSeconds / 3600);
+
+            int hours = timeInSeconds / 3600;
+            int minutes = (timeInSeconds % 3600) / 60;
+            int seconds = (timeInSeconds % 3600) % 60;
+
             String timeString = "";
-            timeString = hours < 10 ? (timeString += "0" + hours) : timeString + hours;
-            timeString = minutes < 10 ? (timeString += ":0" + minutes) : (timeString += ":" + minutes);
-            timeString = seconds < 10 ? (timeString += ":0" + seconds) : (timeString += ":" + seconds);
+            timeString = hours < 10 ? (timeString + "0" + hours) : timeString + hours;
+            timeString = minutes < 10 ? (timeString + ":0" + minutes) : (timeString + ":" + minutes);
+            timeString = seconds < 10 ? (timeString + ":0" + seconds) : (timeString + ":" + seconds);
             currentView.setText(timeString);
         }
     }
