@@ -1,11 +1,15 @@
 package org.tbohne.countup;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -40,6 +44,8 @@ public class Results extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.results);
+
+        this.setActionBarTitle();
 
         Bundle bundle = getIntent().getExtras();
         this.activities = bundle.getStringArrayList("activities");
@@ -86,6 +92,21 @@ public class Results extends AppCompatActivity {
     protected void onStop(){
         super.onStop();
         updateSharedPrefs();
+    }
+
+    private void setActionBarTitle() {
+        TextView tv = new TextView(getApplicationContext());
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT
+        );
+        tv.setLayoutParams(lp);
+        tv.setText("Summary");
+        tv.setTextSize(24);
+        tv.setTextColor(Color.parseColor("#000000"));
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/digital-7.ttf");
+        tv.setTypeface(tf);
+        getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        getSupportActionBar().setCustomView(tv);
     }
 
     private void updateSharedPrefs() {
