@@ -66,8 +66,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * If the user has already entered activities in the past, these activities are restored.
      *
-     * @return
+     * @return whether or not it was possible to restore all activities
      */
     private boolean restoreActivities() {
 
@@ -87,15 +88,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
+     * Appends the given activity to the list of activities.
      *
-     * @param activityIdx
-     * @param activity
+     * @param activity - the activity to be stored
      */
-    private void setActivity(int activityIdx, String activity) {
-        // this.activities.set(activityIdx, activity);
+    private void setActivity(String activity) {
         this.activities.add(activity);
     }
 
+    /**
+     * Prompts the user to enter the specified activity (0-5).
+     *
+     * @param activityIdx - the index of the activity to be prompted
+     */
     private void promptActivity(final int activityIdx) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
@@ -103,20 +108,17 @@ public class MainActivity extends AppCompatActivity {
 
         builder.setCancelable(false);
 
-        // Set up the input
         final EditText input = new EditText(MainActivity.this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_WEB_EDIT_TEXT);
         builder.setView(input);
 
-        // Set up the buttons
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (input.getText().toString().equals("")) {
                     input.setText("ACT " + activityIdx);
                 }
-                setActivity(activityIdx, input.getText().toString());
+                setActivity(input.getText().toString());
             }
         });
         builder.show();
