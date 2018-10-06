@@ -97,7 +97,7 @@ public class CountUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (((TextView)v).getText().equals("\u2016")) {
-                    pauseCurrentActivity();
+                    terminateCurrentActivity();
                     currentMode = PAUSED;
                     ((TextView)v).setText("\u25b6");
                 } else {
@@ -271,10 +271,7 @@ public class CountUp extends AppCompatActivity {
         this.times.set(ID, elapsedMillis / 1000 + "");
     }
 
-    /**
-     *
-     */
-    private void pauseCurrentActivity() {
+    private void terminateCurrentActivity() {
         if (this.currentActivity.equals(this.activities.get(0))) {
             this.timeWhenStoppedChronometer0 = this.chronometers.get(0).getBase() - SystemClock.elapsedRealtime();
             this.chronometers.get(0).stop();
@@ -303,7 +300,6 @@ public class CountUp extends AppCompatActivity {
 
         this.resetCurrentActivity();
         this.currentActivity = "";
-        this.resetCurrentActivity();
     }
 
     /**
@@ -334,33 +330,6 @@ public class CountUp extends AppCompatActivity {
             TextView activityView = this.views.get(currentActivityIdx);
             activityView.setTextColor(Color.parseColor("#FF9D21"));
         }
-    }
-
-    /**
-     * Terminates the activity that is currently active and computes its final duration.
-     */
-    private void terminateCurrentActivity() {
-        if (this.currentActivity.equals(this.activities.get(0))) {
-            this.chronometers.get(0).stop();
-            this.setTimeById(0);
-        } else if (this.currentActivity.equals(this.activities.get(1))) {
-            this.chronometers.get(1).stop();
-            this.setTimeById(1);
-        } else if (this.currentActivity.equals(this.activities.get(2))) {
-            this.chronometers.get(2).stop();
-            this.setTimeById(2);
-        } else if (this.currentActivity.equals(this.activities.get(3))) {
-            this.chronometers.get(3).stop();
-            this.setTimeById(3);
-        } else if (this.currentActivity.equals(this.activities.get(4))) {
-            this.chronometers.get(4).stop();
-            this.setTimeById(4);
-        } else if (this.currentActivity.equals(this.activities.get(5))) {
-            this.chronometers.get(5).stop();
-            this.setTimeById(5);
-        }
-
-        this.resetCurrentActivity();
     }
 
     /**
@@ -411,7 +380,7 @@ public class CountUp extends AppCompatActivity {
             String currentTag = "Act" + currentActivityIdx;
 
             if (!currentTag.equals(builder.toString().trim())) {
-                this.pauseCurrentActivity();
+                this.terminateCurrentActivity();
                 int activityIdx = Integer.parseInt(builder.toString().trim().replace("Act", ""));
                 this.currentActivity = this.activities.get(activityIdx);
                 this.highlightCurrentActivity();
