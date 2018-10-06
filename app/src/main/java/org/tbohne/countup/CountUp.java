@@ -186,7 +186,7 @@ public class CountUp extends AppCompatActivity {
         tv.setTextSize(24);
         tv.setTextColor(Color.parseColor("#000000"));
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/digital-7.ttf");
-        tv.setTypeface(tf);
+        tv.setTypeface(tf, Typeface.BOLD);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
     }
