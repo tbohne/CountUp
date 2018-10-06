@@ -2,6 +2,8 @@
 
 #### CountUp is an NFC-based time tracker.
 
+<img src="res/main_act.png" width="280"/> <img src="res/curr_sess.png" width="280"/> <img src="res/total_dur.png" width="280" />
+
 ----
 ## Requirements
 1. You need six NFC tags to represent the activities (I used [these](https://www.amazon.de/selbstklebend-Durchmesser-beschreibbar-funktioniert-Communication/dp/B06XH2R5ZP/ref=sr_1_3?ie=UTF8&qid=1538492772&sr=8-3&keywords=NFC+Tag)).
